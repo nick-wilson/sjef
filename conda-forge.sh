@@ -21,8 +21,8 @@ fi
 
 echo '__version__ = "'${version}'"' > pysjef/_version.py
 
-mkdir -p $BUILD
-cd $BUILD
+mkdir -p pysjef/$BUILD
+cd pysjef/$BUILD
 if [ -f "install_manifest.txt" ]
 then
     xargs rm < "install_manifest.txt"
@@ -35,6 +35,4 @@ cmake ../.. -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTS=OFF -DBUILD_PROGRAM=OFF
 cmake --build . -t install || { echo 'make install failed' ; exit 1; }
 cd ../
 
-#PREFIX=$PREFIX python setup.py build_ext --inplace
-#PREFIX=$PREFIX python -m pip install --no-deps --force-reinstall --verbose . 
 PREFIX=$PREFIX python -m pip install -e . 
