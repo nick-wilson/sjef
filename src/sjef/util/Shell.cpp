@@ -113,6 +113,10 @@ std::string Shell::operator()(const std::string& command, bool wait, const std::
   //  if (rc != 0)
   //    throw std::runtime_error("Host " + m_host + "; failed remote command: " + command + "\nStandard output:\n" +
   //                             m_last_out + "\nStandard error:\n" + m_last_err);
+  if (!wait and m_job_number==0)
+    throw std::runtime_error("Shell did not return a process id for command");
+  if (localhost() and wait and !m_process.running() and m_process.exit_code()!=0)
+    throw std::runtime_error("Shell process has non-zero exit code:" + std::to_string(m_process.exit_code()));
   if (m_last_out[m_last_out.size() - 1] == '\n')
     m_last_out.resize(m_last_out.size() - 1);
   return m_last_out;

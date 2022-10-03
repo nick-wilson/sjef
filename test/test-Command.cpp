@@ -55,10 +55,9 @@ TEST(Shell, bad_shell) {
 
   {
     sjef::util::Shell comm("localhost", "/bin/badshell");
-    EXPECT_EQ(comm("echo hello"), ""); // TODO this should throw an exception
-    //  EXPECT_ANY_THROW(comm("echo hello"));
-    EXPECT_EQ(comm("echo hello",false,".",0,outfile),""); // TODO this should throw an exception
-//    EXPECT_ANY_THROW(comm("echo hello",false,".",0,outfile)); // TODO this should throw an exception
+    // EXPECT_EQ(comm("echo hello"), ""); // TODO this should throw an exception
+    EXPECT_THROW(comm("echo hello"), std::runtime_error);
+    EXPECT_THROW(comm("echo hello",false,".",0,outfile), std::runtime_error);
     std::ifstream t(outfile);
     comm.wait();
     std::stringstream buffer;
