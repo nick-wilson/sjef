@@ -70,6 +70,7 @@ protected:
   const bool localhost() const;
   void poll_job(int verbosity = 0);
   void set_status(status stat);
+  mutable bool m_failed = false;
 };
 } // namespace sjef::util
 

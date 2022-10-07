@@ -210,7 +210,8 @@ void Job::poll_job(int verbosity) {
   auto start = Clock::now();
   auto stop = Clock::now();
   //    std::cout << "Polling starts" << std::endl;
-  while (true) {
+  try {
+   while (true) {
     //    std::cout << "m_killed " << m_killed << std::endl;
     {
       auto l = std::lock_guard(kill_mutex);
@@ -285,6 +286,12 @@ void Job::poll_job(int verbosity) {
   set_status(m_project.status_from_output());
   m_backend_command_server.reset(); // close down backend server as no longer needed
   m_trace(4 - verbosity) << "Polling stops" << std::endl;
+  } catch (std::runtime_error) {
+      std::cout << "polling caught exception" << std::endl;
+      m_failed = true;
+      set_status(failed);
+      return;
+  }
 }
 
 } // namespace sjef::util
