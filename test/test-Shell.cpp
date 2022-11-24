@@ -50,7 +50,7 @@ TEST(Shell, local_asynchronous) {
   if (sjef::util::Shell::local_asynchronous_supported()) {
     const std::string testfile{"testfile"};
     sjef::util::Shell comm;
-    comm("pwd", false);
+    comm("echo hello", false);
     EXPECT_NE(comm.job_number(), 0) << "Output stream:\n"
                                     << comm.out() << std::endl
                                     << "Error stream:\n"
@@ -94,14 +94,10 @@ TEST(Shell, bad_shell) {
 }
 
 TEST(Shell, remote_asynchronous) {
+#ifndef WIN32
   if (sjef::util::Shell::local_asynchronous_supported()) {
     char hostname[HOST_NAME_MAX];
-#ifndef WIN32
     gethostname(hostname, HOST_NAME_MAX);
-#else
-    // test is not called on Windows as cannot ssh to hostname, comment out call to gethostname to avoid linking error
-    strcpy(hostname,"localhost");
-#endif
     sjef::util::Shell comm(hostname);
     fs::path testdir{fs::current_path() / "test directory"};
     fs::path testfile{testdir / "test_remote_asynchronous"};
@@ -128,4 +124,5 @@ TEST(Shell, remote_asynchronous) {
       fs::remove(testfile);
     fs::remove(testdir);
   }
+#endif
 }
